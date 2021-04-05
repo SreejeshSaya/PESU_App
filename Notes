@@ -1,0 +1,29 @@
+PESU APP
+
+Attendance
+Course Feedback
+Notifications
+
+Attendance
+list of courses ---> DAA CN CC
+Click on one course
+<ul>
+<li> Date --- Attended (True/ False)
+
+Notification
+<ul>
+<li> Top 5 Notifications </li>
+
+Teacher Pers
+Attendance 
+- Views list of students with a checkbox on the side
+- If student present, tick box
+- Submit
+<optional>
+- If attendance is already taken, and teacher clicks on attendance.. She should 
+
+Push Event Notification
+- Input Title
+- Input Descriptions
+- Button to Push
+Feedback <optional>
