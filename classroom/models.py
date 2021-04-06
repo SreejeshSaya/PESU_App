@@ -9,7 +9,11 @@ from django.contrib.auth.models import AbstractUser
 from choices import branchChoices
 
 class MyUser(AbstractUser):
-	isTeacher = models.BooleanField(default=False)
+	@property
+	def isTeacher(self):
+		if hasattr(self, 'teacher'):
+			return True
+		return False
 
 class Course(models.Model):
 	code = models.CharField(max_length=13, primary_key=True, default="000000")
@@ -18,6 +22,7 @@ class Course(models.Model):
 	credits = models.PositiveIntegerField(default=1, validators=[MinValueValidator(1), MaxValueValidator(8)])
 
 class Student(models.Model):
+	user = models.OneToOneField(MyUser, on_delete=models.CASCADE, null=True)
 	srn = models.CharField(max_length=13, primary_key=True, verbose_name="SRN")
 	name = models.CharField(max_length=20)
 	email = models.EmailField()
@@ -40,6 +45,7 @@ class Student(models.Model):
 		return self.srn
 
 class Teacher(models.Model):
+	user = models.OneToOneField(MyUser, on_delete=models.CASCADE, null=True)
 	regNo = models.CharField(max_length=10, primary_key=True, verbose_name="Reg No")
 	name = models.CharField(max_length=20)
 	email = models.EmailField()
@@ -60,12 +66,17 @@ class CourseEnrolled(models.Model):
 	studentSRN = models.ForeignKey(Student, on_delete=models.CASCADE)
 	courseCode = models.ForeignKey(Course, on_delete=models.CASCADE)
 	# semester = StudentSRN.semester
+	class Meta():
+		verbose_name = "Courses Enrolled"
 
 class Attendance(models.Model):
 	studentSRN = models.ForeignKey(Student, on_delete=models.CASCADE)
 	courseCode = models.ForeignKey(Course, on_delete=models.CASCADE)
 	classDate = models.DateField()
 	attended = models.BooleanField(default='False')
+
+	class Meta():
+		verbose_name = "Student Attendance"
 
 	def __str__(self):
 		sname = Student.objects.get(name=self.student)
