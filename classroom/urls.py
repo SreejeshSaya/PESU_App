@@ -3,7 +3,8 @@ from . import views
 from django.contrib import admin
 
 urlpatterns = [
-    path('', views.indexView, name='index')
+    path('', views.indexView, name='index'),
+    path('notifications', views.notificationsView, name='notifications')
 ]
 
 # admin.site.site_url= None

@@ -36,13 +36,13 @@ class Student(models.Model):
 	branch = models.CharField(max_length=3, choices=branchChoices, default='CSE')
 
 	class Meta:
-		ordering = ['srn']
+		ordering = ('srn',)
 
 	def get_absolute_url(self):
 		return reverse('student', args=[self.srn])
 
 	def __str__(self):
-		return self.srn
+		return self.name
 
 class Teacher(models.Model):
 	user = models.OneToOneField(MyUser, on_delete=models.CASCADE, null=True)
@@ -60,7 +60,7 @@ class Teacher(models.Model):
 		return reverse('teacher', args=[self.regNo])
 
 	def __str__(self):
-		return self.regNo
+		return self.name
 
 class CourseEnrolled(models.Model):
 	studentSRN = models.ForeignKey(Student, on_delete=models.CASCADE)
@@ -75,10 +75,19 @@ class Attendance(models.Model):
 	classDate = models.DateField()
 	attended = models.BooleanField(default='False')
 
-	class Meta():
+	class Meta:
 		verbose_name = "Student Attendance"
 
 	def __str__(self):
 		sname = Student.objects.get(name=self.student)
 		cname = Course.objects.get(name=self.course)
 		return '%s : %s' % (sname.name, cname.id)
+
+class Notification(models.Model):
+	teacher = models.ForeignKey(Teacher, on_delete=models.CASCADE)
+	title = models.CharField(max_length=50)
+	description = models.TextField(max_length=200)
+	time = models.DateTimeField(auto_now_add=True)
+
+	class Meta:
+		ordering = ('time',)
