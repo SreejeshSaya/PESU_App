@@ -8,8 +8,20 @@ from django.contrib.auth.decorators import login_required
 @login_required
 def indexView(request):
 	print("Teacher?:", request.user.isTeacher)
+	if request.user.isTeacher:
+		return render(request, 't_homepage.html')
 	# if request.user.isTeacher:
 	# 	return render(request, 'info/t_homepage.html')
 	# else:
 	# 	return render(request, 'info/homepage.html')
 	# return render(request, 'info/logout.html')
+
+####Attendance####
+
+@login_required
+
+def t_clas(request, teacher_id, choice):
+    teacher1 = get_object_or_404(Teacher, regNo=teacher_id)
+    print(teacher1.course)
+    choice = 1
+    return render(request, 't_clas.html', {'teacher1': teacher1, 'choice': choice})

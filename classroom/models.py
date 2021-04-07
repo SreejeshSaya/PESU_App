@@ -23,16 +23,16 @@ class Course(models.Model):
 
 class Student(models.Model):
 	user = models.OneToOneField(MyUser, on_delete=models.CASCADE, null=True)
-	srn = models.CharField(max_length=13, primary_key=True, verbose_name="SRN")
+	srn = models.CharField(max_length=13, primary_key=True, verbose_name="SRN", default="PES1201800000")
 	name = models.CharField(max_length=20)
-	email = models.EmailField()
-	phNo = models.CharField(max_length=10, validators=[MinLengthValidator(10)], verbose_name="Phone No.")
-	dob = models.DateField()
+	email = models.EmailField(default="email@gmail.com")
+	phNo = models.CharField(max_length=10, default="0000000000",validators=[MinLengthValidator(10)], verbose_name="Phone No.")
+	dob = models.DateField(default='2000-05-05')
 	age = models.PositiveIntegerField(default=18, validators=[MinValueValidator(18)])
 	genderChoices = [ ('M', 'Male'), ('F', 'Female') , ('O', 'Other') ]
 	gender = models.CharField(max_length=7, choices=genderChoices, default='Male')
 	semester = models.PositiveIntegerField(default=1, validators=[MinValueValidator(1), MaxValueValidator(8)])
-	cgpa = models.DecimalField(max_digits=4, decimal_places=2, validators=[MinValueValidator(5.0), MaxValueValidator(10.0)])
+	cgpa = models.DecimalField(max_digits=4, default = 9, decimal_places=2, validators=[MinValueValidator(5.0), MaxValueValidator(10.0)])
 	branch = models.CharField(max_length=3, choices=branchChoices, default='CSE')
 
 	class Meta:
@@ -46,10 +46,10 @@ class Student(models.Model):
 
 class Teacher(models.Model):
 	user = models.OneToOneField(MyUser, on_delete=models.CASCADE, null=True)
-	regNo = models.CharField(max_length=10, primary_key=True, verbose_name="Reg No")
+	regNo = models.CharField(max_length=10, default="PESTECH000", primary_key=True, verbose_name="Reg No")
 	name = models.CharField(max_length=20)
-	email = models.EmailField()
-	phNo = models.CharField(max_length=10, validators=[MinLengthValidator(10)], verbose_name="Phone No.")
+	email = models.EmailField(default="teacher@gmail.com")
+	phNo = models.CharField(max_length=10, default="0000000000", validators=[MinLengthValidator(10)], verbose_name="Phone No.")
 	genderChoices = [ ('M', 'Male'), ('F', 'Female') , ('O', 'Other') ]
 	gender = models.CharField(max_length=7, choices=genderChoices, default='Male')
 
