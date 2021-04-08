@@ -1,9 +1,11 @@
 from django.shortcuts import render, get_object_or_404
 from django.http import HttpResponseRedirect
-from .models import Student, Attendance, Teacher, Course, CourseEnrolled, Notification
 from django.urls import reverse
 from django.utils import timezone
 from django.contrib.auth.decorators import login_required
+
+from .models import Student, Attendance, Teacher, Course, CourseEnrolled, Notification
+from .forms import NotificationForm
 
 @login_required
 def indexView(request):
@@ -34,4 +36,9 @@ def notificationsView(request):
 @login_required
 def createNotificationView(request):
 	if request.user.isTeacher:
-		return render(request, 'create-notification.html')
+		if request.method == 'POST':
+			form = NotificationForm(request.POST)
+			if form.is_valid():
+				return None
+		else:
+			return render(request, 'create-notification.html')

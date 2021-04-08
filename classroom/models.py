@@ -54,7 +54,7 @@ class Teacher(models.Model):
 	gender = models.CharField(max_length=7, choices=genderChoices, default='Male')
 
 	department = models.CharField(max_length=3, choices=branchChoices, default='CSE')
-	course = models.ForeignKey(Course, on_delete=models.PROTECT)
+	course = models.ForeignKey(Course, on_delete=models.SET_NULL, null=True)
 
 	def get_absolute_url(self):
 		return reverse('teacher', args=[self.regNo])
@@ -90,4 +90,4 @@ class Notification(models.Model):
 	time = models.DateTimeField(auto_now_add=True)
 
 	class Meta:
-		ordering = ('time',)
+		ordering = ('-time',)
