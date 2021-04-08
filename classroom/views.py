@@ -35,3 +35,32 @@ def take_attendance(request, teacher_id, choice):
 @login_required
 def att_confirm(request, teacher_id, choice):
 	print(request)
+
+# def viewAttendance(request):
+
+def takeAttendance(request):
+	reqUser = request.user
+	print(reqUser.isTeacher)
+	if reqUser.isTeacher:
+		course = Teacher.objects.get(regNo=reqUser.username).course
+		print(course.code)
+		if request.method == 'POST':
+			studentsPresent = list(request.POST.dict().keys())
+			studentsPresent.remove('csrfmiddlewaretoken')
+			print(studentsPresent)
+			studentsEnrolled = CourseEnrolled.objects.filter(courseCode=course).select_related('studentSRN')
+			print(studentsEnrolled)
+			for student in studentsEnrolled:
+				attended = False
+				if student.studentSRN.srn in studentsPresent:
+					attended = True
+				dailyAtt = Attendance.objects.create(studentSRN=student.studentSRN, courseCode=course, attended=attended)
+				dailyAtt.save()
+			# for student in studentsPresent:
+			# 	studentSRN = Student.objects.get(srn=student)
+			# 	present = Attendance.objects.create(studentSRN=studentSRN, courseCode=course)
+		elif request.method == 'GET':
+			teacher = Teacher.objects.get(regNo=reqUser.username)
+			studentList = CourseEnrolled.objects.filter(courseCode=teacher.course).values_list('studentSRN', flat=True).order_by('studentSRN')
+			print(list(studentList))
+			return render(request, 'take-attendance.html', context={'studentList': studentList})

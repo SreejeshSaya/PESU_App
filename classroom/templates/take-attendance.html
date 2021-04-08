@@ -1,19 +1,29 @@
-<!DOCTYPE html>
-<html>
-<head>
-<style>
-table, th, td {
-  border: 1px solid black;
-}
-</style>
-</head>
-<body>
+{% extends 'base.html' %}
 
-<h2>from take_attendance.html</h2>
-
+{% block content %}
+<h2>Take Attendance</h2>
 <p>Put date ma, and take attendace ma/p>
 
-<form action="http://www.google.com" method="post">
+<form action="{% url 'enter-attendance' %}" method="POST"> {% csrf_token %}
+<table>
+    <thead>
+        <tr>
+            <th>Student SRN</th>
+            <th>Present</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for student in studentList %}
+        <tr>
+            <td>{{ student }}</td>
+            <td><input type="checkbox" name="{{ student }}">
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+<input type="submit" value="Submit Attendance" />
+</form>
+<!-- <form action="" method="post">
             {% csrf_token %}
     <label for="date">Enter Date: </label>
     <input type="date" name="date">
@@ -47,8 +57,5 @@ table, th, td {
     </table>
 
     <input type="submit" value="Submit">
-</form>
-
-
-</body>
-</html>
+</form> -->
+{% endblock %}

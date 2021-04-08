@@ -21,6 +21,9 @@ class Course(models.Model):
 	branch = models.CharField(max_length=3, choices=branchChoices, default='CSE')
 	credits = models.PositiveIntegerField(default=1, validators=[MinValueValidator(1), MaxValueValidator(8)])
 
+	def __str__(self):
+		return self.code
+
 class Student(models.Model):
 	user = models.OneToOneField(MyUser, on_delete=models.CASCADE, null=True)
 	srn = models.CharField(max_length=13, primary_key=True, verbose_name="SRN", default="PES1201800000")
@@ -72,13 +75,11 @@ class CourseEnrolled(models.Model):
 class Attendance(models.Model):
 	studentSRN = models.ForeignKey(Student, on_delete=models.CASCADE)
 	courseCode = models.ForeignKey(Course, on_delete=models.CASCADE)
-	classDate = models.DateField()
+	classDate = models.DateField(auto_now_add=True)
 	attended = models.BooleanField(default='False')
 
 	class Meta():
 		verbose_name = "Student Attendance"
 
 	def __str__(self):
-		sname = Student.objects.get(name=self.student)
-		cname = Course.objects.get(name=self.course)
-		return '%s : %s' % (sname.name, cname.id)
+		return "%s - %s - %s " % (self.studentSRN, self.courseCode, self.classDate)
