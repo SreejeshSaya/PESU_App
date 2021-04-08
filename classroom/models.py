@@ -81,7 +81,7 @@ class Attendance(models.Model):
 		verbose_name = "Student Attendance"
 
 	def __str__(self):
-		return "%s - %s - %s " % (self.studentSRN, self.courseCode, self.classDate
+		return "%s - %s - %s " % (self.studentSRN, self.courseCode, self.classDate)
 
 class Notification(models.Model):
 	teacher = models.ForeignKey(Teacher, on_delete=models.CASCADE)
