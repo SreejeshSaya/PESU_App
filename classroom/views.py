@@ -22,9 +22,6 @@ def indexView(request):
 def notificationsView(request):
 	print(f"notificationsView --- {request.user}")
 	notifs = Notification.objects.all()[:10]
-	# print(notifs[0].name)
-	# for notif in notifs:
-	# 	notif['teacher'] = Teacher.objects.get(regNo=tRegNo)
 	return render(request, 'notifications.html', context={'notifications': notifs})
 
 @login_required
@@ -52,8 +49,6 @@ def studentFeedback(request):
 			if feedback.exists():
 				return render(request, 'student-feedback.html', context={'feedbackSubmitted': True})
 			form = FeedbackForm(request.POST)
-			# print(request.POST['courseCode'])
-			# if form.is_valid():
 			print("FORM VALID")
 			feedback = form.save(commit=False)
 			feedback.studentSRN = Student.objects.get(srn=reqUser.username)
@@ -61,16 +56,16 @@ def studentFeedback(request):
 			print(feedback)
 			feedback.save()
 			return redirect('/')
-			# else:
-			# 	print("FORM INVALID")
-			# 	print("ERRORS:", form.errors)
 		else:
 			form = FeedbackForm(reqUser.username)
-			# course = CourseEnrolled.objects.filter(studentSRN=reqUser.username)
 			return render(request, 'student-feedback.html', context={'form': form, 'feedbackSubmitted': False})
 
-# def viewAttendance(request):
+@login_required
+def viewAttendance(request):
+	reqUser = request.user
+	if not reqUser.isTeacher:
 
+@login_required
 def takeAttendance(request):
 	reqUser = request.user
 	print(reqUser.isTeacher)
@@ -89,9 +84,7 @@ def takeAttendance(request):
 					attended = True
 				dailyAtt = Attendance.objects.create(studentSRN=student.studentSRN, courseCode=course, attended=attended)
 				dailyAtt.save()
-			# for student in studentsPresent:
-			# 	studentSRN = Student.objects.get(srn=student)
-			# 	present = Attendance.objects.create(studentSRN=studentSRN, courseCode=course)
+
 		elif request.method == 'GET':
 			teacher = Teacher.objects.get(regNo=reqUser.username)
 			studentList = CourseEnrolled.objects.filter(courseCode=teacher.course).values_list('studentSRN', flat=True).order_by('studentSRN')

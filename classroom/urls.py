@@ -9,6 +9,3 @@ urlpatterns = [
     path('create-notification/', views.createNotificationView, name='create-notification'),
     path('student-feedback/', views.studentFeedback, name='student-feedback')
 ]
-
-# admin.site.site_url= None
-# admin.site.site_header = 'My Site'
