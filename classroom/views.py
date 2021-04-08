@@ -64,6 +64,8 @@ def studentFeedback(request):
 def viewAttendance(request):
 	reqUser = request.user
 	if not reqUser.isTeacher:
+		attendance = Attendance.objects.filter(studentSRN=reqUser.username)
+		return render(request, 'view-attendance.html', context={'attendance': attendance})
 
 @login_required
 def takeAttendance(request):
@@ -84,6 +86,7 @@ def takeAttendance(request):
 					attended = True
 				dailyAtt = Attendance.objects.create(studentSRN=student.studentSRN, courseCode=course, attended=attended)
 				dailyAtt.save()
+			return redirect('/')
 
 		elif request.method == 'GET':
 			teacher = Teacher.objects.get(regNo=reqUser.username)
