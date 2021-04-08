@@ -25,3 +25,13 @@ def t_clas(request, teacher_id, choice):
     print(teacher1.course)
     choice = 1
     return render(request, 't_clas.html', {'teacher1': teacher1, 'choice': choice})
+
+@login_required
+def take_attendance(request, teacher_id, choice):
+	teacher1 = get_object_or_404(Teacher, regNo=teacher_id)
+	students1 = CourseEnrolled.objects.filter(courseCode=teacher1.course)
+	return render(request, 'take_attendance.html', context = {"students1":students1})
+
+@login_required
+def att_confirm(request, teacher_id, choice):
+	print(request)

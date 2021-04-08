@@ -26,7 +26,7 @@ table, th, td {
   <tr>
     <td>{{ teacher1.course}}</td>
     <td>
-        <form action="http://www.google.com">
+        <form action="{% url 'take_attendance' teacher1.regNo 1 %}">
         <input type="submit" value="Give Attendance" />
         </form>
     </td>

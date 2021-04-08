@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html>
+<head>
+<style>
+table, th, td {
+  border: 1px solid black;
+}
+</style>
+</head>
+<body>
+
+<h2>from take_attendance.html</h2>
+
+<p>Put date ma, and take attendace ma/p>
+
+<form action="http://www.google.com" method="post">
+            {% csrf_token %}
+    <label for="date">Enter Date: </label>
+    <input type="date" name="date">
+
+    <table id="dataTable" width="100%" cellspacing="0">
+      <thead>
+        <tr>
+            <th>Student name</th>
+            <th></th>
+        </tr>
+      </thead>
+        <tbody>
+        {% for s in students1 %}
+            <tr>
+            <td>{{s.name}}</td>
+            <td>
+                <div data-toggle="buttons">
+
+                        <label>
+                            <input type="radio" name="{{ s.srn }}" id="option1" autocomplete="off" value="present" checked> Present
+                        </label>
+
+                        <label class="btn btn-outline-danger">
+                            <input type="radio" name="{{ s.srn }}" id="option2" autocomplete="off" value="absent"> Absent
+                        </label>
+                </div>
+            </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <input type="submit" value="Submit">
+</form>
+
+
+</body>
+</html>
