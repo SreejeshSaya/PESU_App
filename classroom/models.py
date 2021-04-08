@@ -65,7 +65,6 @@ class Teacher(models.Model):
 class CourseEnrolled(models.Model):
 	studentSRN = models.ForeignKey(Student, on_delete=models.CASCADE)
 	courseCode = models.ForeignKey(Course, on_delete=models.CASCADE)
-	# semester = StudentSRN.semester
 	class Meta():
 		verbose_name = "Courses Enrolled"
 
@@ -91,3 +90,11 @@ class Notification(models.Model):
 
 	class Meta:
 		ordering = ('-time',)
+
+class Feedback(models.Model):
+	studentSRN = models.ForeignKey(Student, on_delete=models.CASCADE)
+	courseCode = models.ForeignKey(Course, on_delete=models.CASCADE)
+	teaching = models.SmallIntegerField(default=3, validators=[MinValueValidator(1), MaxValueValidator(5)])
+	syllabus = models.SmallIntegerField(default=3, validators=[MinValueValidator(1), MaxValueValidator(5)])
+	doubtClar = models.SmallIntegerField(default=3, validators=[MinValueValidator(1), MaxValueValidator(5)])
+	miscFeedback = models.TextField(max_length=100, default = 'None')

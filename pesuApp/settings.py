@@ -19,7 +19,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 
 AUTH_USER_MODEL = 'classroom.MyUser'
 LOGIN_REDIRECT_URL = '/'
-LOGIN_URL = '/account/login'
+LOGIN_URL = '/accounts/login'
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/3.1/howto/deployment/checklist/

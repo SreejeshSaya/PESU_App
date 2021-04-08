@@ -6,7 +6,8 @@ from .models import MyUser,\
 					Course,\
 					CourseEnrolled,\
 					Attendance,\
-					Notification
+					Notification,\
+					Feedback
 
 admin.site.register(MyUser, UserAdmin)
 admin.site.register(Student)
@@ -15,3 +16,4 @@ admin.site.register(Course)
 admin.site.register(CourseEnrolled)
 admin.site.register(Attendance)
 admin.site.register(Notification)
+admin.site.register(Feedback)
