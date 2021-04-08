@@ -1,5 +1,4 @@
-from django.shortcuts import render, get_object_or_404
-from django.http import HttpResponseRedirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.urls import reverse
 from django.utils import timezone
 from django.contrib.auth.decorators import login_required
@@ -17,8 +16,6 @@ def indexView(request):
 			user = Teacher.objects.get(regNo=reqUser)
 		else:
 			user = Student.objects.get(srn=reqUser)
-		# print(type(user))
-		print(user)
 		return render(request, 'index.html', context={'user': user})
 	# else:
 	# 	return render(request, 'info/homepage.html')
@@ -35,10 +32,15 @@ def notificationsView(request):
 
 @login_required
 def createNotificationView(request):
-	if request.user.isTeacher:
+	reqUser = request.user
+	if reqUser.isTeacher:
 		if request.method == 'POST':
 			form = NotificationForm(request.POST)
 			if form.is_valid():
-				return None
+				notif = form.save(commit=False)
+				notif.teacher = Teacher.objects.get(regNo=reqUser.username)
+				notif.save()
+				return redirect('/notifications')
 		else:
-			return render(request, 'create-notification.html')
+			form = NotificationForm()
+			return render(request, 'create-notification.html', context={'form': form})

@@ -9,5 +9,3 @@ class NotificationForm(forms.ModelForm):
 			'title': forms.TextInput(),
 			'description': forms.Textarea()
 		}
-		
-
