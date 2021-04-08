@@ -17,9 +17,6 @@ def indexView(request):
 		else:
 			user = Student.objects.get(srn=reqUser)
 		return render(request, 'index.html', context={'user': user})
-	# else:
-	# 	return render(request, 'info/homepage.html')
-	# return render(request, 'info/logout.html')
 
 @login_required
 def notificationsView(request):
@@ -71,3 +68,32 @@ def studentFeedback(request):
 			form = FeedbackForm(reqUser.username)
 			# course = CourseEnrolled.objects.filter(studentSRN=reqUser.username)
 			return render(request, 'student-feedback.html', context={'form': form, 'feedbackSubmitted': False})
+
+# def viewAttendance(request):
+
+def takeAttendance(request):
+	reqUser = request.user
+	print(reqUser.isTeacher)
+	if reqUser.isTeacher:
+		course = Teacher.objects.get(regNo=reqUser.username).course
+		print(course.code)
+		if request.method == 'POST':
+			studentsPresent = list(request.POST.dict().keys())
+			studentsPresent.remove('csrfmiddlewaretoken')
+			print(studentsPresent)
+			studentsEnrolled = CourseEnrolled.objects.filter(courseCode=course).select_related('studentSRN')
+			print(studentsEnrolled)
+			for student in studentsEnrolled:
+				attended = False
+				if student.studentSRN.srn in studentsPresent:
+					attended = True
+				dailyAtt = Attendance.objects.create(studentSRN=student.studentSRN, courseCode=course, attended=attended)
+				dailyAtt.save()
+			# for student in studentsPresent:
+			# 	studentSRN = Student.objects.get(srn=student)
+			# 	present = Attendance.objects.create(studentSRN=studentSRN, courseCode=course)
+		elif request.method == 'GET':
+			teacher = Teacher.objects.get(regNo=reqUser.username)
+			studentList = CourseEnrolled.objects.filter(courseCode=teacher.course).values_list('studentSRN', flat=True).order_by('studentSRN')
+			print(list(studentList))
+			return render(request, 'take-attendance.html', context={'studentList': studentList})

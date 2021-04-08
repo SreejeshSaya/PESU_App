@@ -16,23 +16,26 @@ class MyUser(AbstractUser):
 		return False
 
 class Course(models.Model):
-	code = models.CharField(max_length=13, primary_key=True, default="000000")
+	code = models.CharField(max_length=13, primary_key=True)
 	name = models.CharField(max_length=30)
 	branch = models.CharField(max_length=3, choices=branchChoices, default='CSE')
 	credits = models.PositiveIntegerField(default=1, validators=[MinValueValidator(1), MaxValueValidator(8)])
+
+	def __str__(self):
+		return self.code
 
 class Student(models.Model):
 	user = models.OneToOneField(MyUser, on_delete=models.CASCADE, null=True)
 	srn = models.CharField(max_length=13, primary_key=True, verbose_name="SRN")
 	name = models.CharField(max_length=20)
 	email = models.EmailField()
-	phNo = models.CharField(max_length=10, validators=[MinLengthValidator(10)], verbose_name="Phone No.")
+	phNo = models.CharField(max_length=10,validators=[MinLengthValidator(10)], verbose_name="Phone No.")
 	dob = models.DateField()
 	age = models.PositiveIntegerField(default=18, validators=[MinValueValidator(18)])
 	genderChoices = [ ('M', 'Male'), ('F', 'Female') , ('O', 'Other') ]
 	gender = models.CharField(max_length=7, choices=genderChoices, default='Male')
 	semester = models.PositiveIntegerField(default=1, validators=[MinValueValidator(1), MaxValueValidator(8)])
-	cgpa = models.DecimalField(max_digits=4, decimal_places=2, validators=[MinValueValidator(5.0), MaxValueValidator(10.0)])
+	cgpa = models.DecimalField(max_digits=4, default = 9, decimal_places=2, validators=[MinValueValidator(5.0), MaxValueValidator(10.0)])
 	branch = models.CharField(max_length=3, choices=branchChoices, default='CSE')
 
 	class Meta:
@@ -71,16 +74,14 @@ class CourseEnrolled(models.Model):
 class Attendance(models.Model):
 	studentSRN = models.ForeignKey(Student, on_delete=models.CASCADE)
 	courseCode = models.ForeignKey(Course, on_delete=models.CASCADE)
-	classDate = models.DateField()
+	classDate = models.DateField(auto_now_add=True)
 	attended = models.BooleanField(default='False')
 
 	class Meta:
 		verbose_name = "Student Attendance"
 
 	def __str__(self):
-		sname = Student.objects.get(name=self.student)
-		cname = Course.objects.get(name=self.course)
-		return '%s : %s' % (sname.name, cname.id)
+		return "%s - %s - %s " % (self.studentSRN, self.courseCode, self.classDate
 
 class Notification(models.Model):
 	teacher = models.ForeignKey(Teacher, on_delete=models.CASCADE)
