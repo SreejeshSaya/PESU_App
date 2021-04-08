@@ -2,15 +2,24 @@
 
 {% block content %}
 	{% if request.user.isTeacher %}
-	<a href="{% url 'create-notification' %}">Create Notifications</a>
+	<a href="{% url 'create-notification' %}"><button class="btn btn-primary mt-2 ml-2">Create Notifications</button></a>
 	{% endif %}
 	<ul>
+	<div class="card-deck">
 		{% for notif in notifications %}
-			<li>
+			<!--li>
 				<h4>{{ notif.title }}</h4>
 				<p>{{ notif.description }}</p>
 				<p><span>Posted by {{ notif.teacher.name }} on {{ notif.time }}</span></p>
-			</li>
+			</li-->
+			<div class="card mt-3 border-dark mb-3" style="width: 18rem;">
+			  <div class="card-body">
+			    <h5 class="card-title">{{ notif.title }}</h5>
+			    <h6 class="card-subtitle mb-2 text-muted">Posted by {{ notif.teacher.name }} on {{ notif.time }}</h6>
+			    <p class="card-text">{{ notif.description }}</p>
+			  </div>
+			</div>
 		{% endfor %}
-	</ul>
+	</div>
+	<ul>
 {% endblock %}
