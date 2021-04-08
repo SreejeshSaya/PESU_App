@@ -16,7 +16,7 @@ class MyUser(AbstractUser):
 		return False
 
 class Course(models.Model):
-	code = models.CharField(max_length=13, primary_key=True, default="000000")
+	code = models.CharField(max_length=13, primary_key=True)
 	name = models.CharField(max_length=30)
 	branch = models.CharField(max_length=3, choices=branchChoices, default='CSE')
 	credits = models.PositiveIntegerField(default=1, validators=[MinValueValidator(1), MaxValueValidator(8)])
@@ -26,11 +26,11 @@ class Course(models.Model):
 
 class Student(models.Model):
 	user = models.OneToOneField(MyUser, on_delete=models.CASCADE, null=True)
-	srn = models.CharField(max_length=13, primary_key=True, verbose_name="SRN", default="PES1201800000")
+	srn = models.CharField(max_length=13, primary_key=True, verbose_name="SRN")
 	name = models.CharField(max_length=20)
-	email = models.EmailField(default="email@gmail.com")
-	phNo = models.CharField(max_length=10, default="0000000000",validators=[MinLengthValidator(10)], verbose_name="Phone No.")
-	dob = models.DateField(default='2000-05-05')
+	email = models.EmailField()
+	phNo = models.CharField(max_length=10,validators=[MinLengthValidator(10)], verbose_name="Phone No.")
+	dob = models.DateField()
 	age = models.PositiveIntegerField(default=18, validators=[MinValueValidator(18)])
 	genderChoices = [ ('M', 'Male'), ('F', 'Female') , ('O', 'Other') ]
 	gender = models.CharField(max_length=7, choices=genderChoices, default='Male')
@@ -39,36 +39,35 @@ class Student(models.Model):
 	branch = models.CharField(max_length=3, choices=branchChoices, default='CSE')
 
 	class Meta:
-		ordering = ['srn']
+		ordering = ('srn',)
 
 	def get_absolute_url(self):
 		return reverse('student', args=[self.srn])
 
 	def __str__(self):
-		return self.srn
+		return self.name
 
 class Teacher(models.Model):
 	user = models.OneToOneField(MyUser, on_delete=models.CASCADE, null=True)
-	regNo = models.CharField(max_length=10, default="PESTECH000", primary_key=True, verbose_name="Reg No")
+	regNo = models.CharField(max_length=10, primary_key=True, verbose_name="Reg No")
 	name = models.CharField(max_length=20)
-	email = models.EmailField(default="teacher@gmail.com")
-	phNo = models.CharField(max_length=10, default="0000000000", validators=[MinLengthValidator(10)], verbose_name="Phone No.")
+	email = models.EmailField()
+	phNo = models.CharField(max_length=10, validators=[MinLengthValidator(10)], verbose_name="Phone No.")
 	genderChoices = [ ('M', 'Male'), ('F', 'Female') , ('O', 'Other') ]
 	gender = models.CharField(max_length=7, choices=genderChoices, default='Male')
 
 	department = models.CharField(max_length=3, choices=branchChoices, default='CSE')
-	course = models.ForeignKey(Course, on_delete=models.PROTECT)
+	course = models.ForeignKey(Course, on_delete=models.SET_NULL, null=True)
 
 	def get_absolute_url(self):
 		return reverse('teacher', args=[self.regNo])
 
 	def __str__(self):
-		return self.regNo
+		return self.name
 
 class CourseEnrolled(models.Model):
 	studentSRN = models.ForeignKey(Student, on_delete=models.CASCADE)
 	courseCode = models.ForeignKey(Course, on_delete=models.CASCADE)
-	# semester = StudentSRN.semester
 	class Meta():
 		verbose_name = "Courses Enrolled"
 
@@ -78,8 +77,25 @@ class Attendance(models.Model):
 	classDate = models.DateField(auto_now_add=True)
 	attended = models.BooleanField(default='False')
 
-	class Meta():
+	class Meta:
 		verbose_name = "Student Attendance"
 
 	def __str__(self):
-		return "%s - %s - %s " % (self.studentSRN, self.courseCode, self.classDate)
+		return "%s - %s - %s " % (self.studentSRN, self.courseCode, self.classDate
+
+class Notification(models.Model):
+	teacher = models.ForeignKey(Teacher, on_delete=models.CASCADE)
+	title = models.CharField(max_length=50)
+	description = models.TextField(max_length=200)
+	time = models.DateTimeField(auto_now_add=True)
+
+	class Meta:
+		ordering = ('-time',)
+
+class Feedback(models.Model):
+	studentSRN = models.ForeignKey(Student, on_delete=models.CASCADE)
+	courseCode = models.ForeignKey(Course, on_delete=models.CASCADE)
+	teaching = models.SmallIntegerField(default=3, validators=[MinValueValidator(1), MaxValueValidator(5)])
+	syllabus = models.SmallIntegerField(default=3, validators=[MinValueValidator(1), MaxValueValidator(5)])
+	doubtClar = models.SmallIntegerField(default=3, validators=[MinValueValidator(1), MaxValueValidator(5)])
+	miscFeedback = models.TextField(max_length=100, default = 'None')

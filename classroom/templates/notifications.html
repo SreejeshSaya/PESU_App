@@ -1,0 +1,16 @@
+{% extends 'base.html' %}
+
+{% block content %}
+	{% if request.user.isTeacher %}
+	<a href="{% url 'create-notification' %}">Create Notifications</a>
+	{% endif %}
+	<ul>
+		{% for notif in notifications %}
+			<li>
+				<h4>{{ notif.title }}</h4>
+				<p>{{ notif.description }}</p>
+				<p><span>Posted by {{ notif.teacher.name }} on {{ notif.time }}</span></p>
+			</li>
+		{% endfor %}
+	</ul>
+{% endblock %}
