@@ -29,7 +29,7 @@
         <div class="col-lg-3 col-md-6 mb-4 text-center">
           <div class="card">
             <a href="{% url 'notifications' %}">
-                <img class="card-img-top" src="{% static 'info/images/notification3.png' %}" alt="">
+                <img class="card-img-top" src="{% static 'info/images/notification3.jpg' %}" alt="">
             </a>
             <div class="card-body">
               <h4 class="card-title">Notification</h4>
@@ -40,7 +40,7 @@
             </div>
           </div>
         </div>
-
+        {% if not request.user.isTeacher %}
         <div class="col-lg-3 col-md-6 mb-4 text-center">
           <div class="card">
             <a href="{% url 'student-feedback' %}">
@@ -55,6 +55,7 @@
             </div>
           </div>
         </div>
+        {%endif%}
 
       </div>
 {% endblock %}    
