@@ -99,3 +99,6 @@ class Feedback(models.Model):
 	syllabus = models.SmallIntegerField(default=3, validators=[MinValueValidator(1), MaxValueValidator(5)])
 	doubtClar = models.SmallIntegerField(default=3, validators=[MinValueValidator(1), MaxValueValidator(5)])
 	miscFeedback = models.TextField(max_length=100, default = 'None')
+
+	def __str__(self):
+		return "%s : %s" % (self.studentSRN, self.courseCode)
