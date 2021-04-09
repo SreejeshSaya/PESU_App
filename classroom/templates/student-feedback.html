@@ -6,8 +6,9 @@
 	{% else %}
 	<form class="form-check" action="{% url 'student-feedback' %}" method="POST"> {% csrf_token %}
 	    
+	    <h1 class="text-center">Course Feedback </h1>
 	    <div class="ml-3 mt-3">
-	    	<label for="{{ form.courseCode.id_for_label }}">Course Code</label>
+	    	<label for="{{ form.courseCode.id_for_label }}"><h5>Course Code</h5></label>
 	    	{{ form.courseCode }}
 	    </div>
 	    <div>
@@ -19,7 +20,7 @@
 	    	{% endfor %}
  -->
 	     	<div class="ml-3 mt-3">
-		    	<label for="{{ form.teaching.id_for_label }}">Teaching</label>
+		    	<label for="{{ form.teaching.id_for_label }}"><h5>Teaching</h5></label>
 	    	</div>
 	    	{% for option in form.teaching %}
 	    	<div class="d-inline ml-5">
@@ -37,7 +38,7 @@
 	    	{% endfor %}
  -->
 	     	<div class="ml-3 mt-3">
-		    	<label for="{{ form.syllabus.id_for_label }}">Syllabus Coverage</label>
+		    	<label for="{{ form.syllabus.id_for_label }}"><h5>Syllabus Coverage</h5></label>
 	    	</div>
 	    	{% for option in form.syllabus  %}
 	    	<div class="d-inline ml-5">
@@ -48,7 +49,7 @@
 	    </div>
 	     <div>
 	     	<div class="ml-3 mt-3">
-		    	<label for="{{ form.doubtClar.id_for_label }}">Doubt Clarification</label>
+		    	<label for="{{ form.doubtClar.id_for_label }}"><h5>Doubt Clarification</h5></label>
 	    	</div>
 	    	{% for option in form.doubtClar %}
 	    	<div class="d-inline ml-5">
@@ -66,7 +67,7 @@
 		<div class="container ml-0 mt-3">	 
 	        <div class="form-row">
 	            <div class="form-group col-md-4">
-	              <label for="{{ form.miscFeedback.id_for_labe}}">Miscellaneous Feedback</label> {{ form.miscFeedback }}
+	              <label for="{{ form.miscFeedback.id_for_labe}}"><h5>Miscellaneous Feedback</h5></label> {{ form.miscFeedback }}
 	            </div>
 	        </div>
 
