@@ -71,6 +71,9 @@ class CourseEnrolled(models.Model):
 	class Meta():
 		verbose_name = "Courses Enrolled"
 
+	def __str__(self):
+		return "%s: %s" %(self.studentSRN, self.courseCode)
+
 class Attendance(models.Model):
 	studentSRN = models.ForeignKey(Student, on_delete=models.CASCADE)
 	courseCode = models.ForeignKey(Course, on_delete=models.CASCADE)
@@ -99,7 +102,7 @@ class Feedback(models.Model):
 	teaching = models.SmallIntegerField(default=3, validators=[MinValueValidator(1), MaxValueValidator(5)])
 	syllabus = models.SmallIntegerField(default=3, validators=[MinValueValidator(1), MaxValueValidator(5)])
 	doubtClar = models.SmallIntegerField(default=3, validators=[MinValueValidator(1), MaxValueValidator(5)])
-	miscFeedback = models.TextField(max_length=100, default = 'None')
+	miscFeedback = models.TextField(max_length=100, null=True)
 
 	def __str__(self):
 		return "%s : %s" % (self.studentSRN, self.courseCode)
