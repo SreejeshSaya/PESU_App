@@ -5,40 +5,77 @@
 		<h2> Oops! Looks like you have already submitted feedback for this course.</h2>
 	{% else %}
 	<form class="form-check" action="{% url 'student-feedback' %}" method="POST"> {% csrf_token %}
-	    <div>
+	    
+	    <div class="ml-3 mt-3">
 	    	<label for="{{ form.courseCode.id_for_label }}">Course Code</label>
 	    	{{ form.courseCode }}
 	    </div>
 	    <div>
-	    	<label for="{{ form.teaching.id_for_label }}">Teaching</label>
+<!-- 	    	<label for="{{ form.teaching.id_for_label }}">Teaching</label>
 	    	{% for option in form.teaching %}
 	    	<div>
 	    		{{ option}}
 	    	</div>
 	    	{% endfor %}
+ -->
+	     	<div class="ml-3 mt-3">
+		    	<label for="{{ form.teaching.id_for_label }}">Teaching</label>
+	    	</div>
+	    	{% for option in form.teaching %}
+	    	<div class="d-inline ml-5">
+	    		{{ option}}
+	    	</div>
+	    	{% endfor %}
+
 	    </div>
 	     <div>
-	    	<label for="{{ form.syllabus.id_for_label }}">Syllabus Coverage</label>
+<!-- 	    	<label for="{{ form.syllabus.id_for_label }}">Syllabus Coverage</label>
 	    	{% for option in form.syllabus %}
 	    	<div>
 	    		{{ option}}
 	    	</div>
 	    	{% endfor %}
+ -->
+	     	<div class="ml-3 mt-3">
+		    	<label for="{{ form.syllabus.id_for_label }}">Syllabus Coverage</label>
+	    	</div>
+	    	{% for option in form.syllabus  %}
+	    	<div class="d-inline ml-5">
+	    		{{ option}}
+	    	</div>
+	    	{% endfor %}
+
 	    </div>
 	     <div>
-	    	<label for="{{ form.doubtClar.id_for_label }}">Doubt Clarification</label>
+	     	<div class="ml-3 mt-3">
+		    	<label for="{{ form.doubtClar.id_for_label }}">Doubt Clarification</label>
+	    	</div>
 	    	{% for option in form.doubtClar %}
-	    	<div>
+	    	<div class="d-inline ml-5">
 	    		{{ option}}
 	    	</div>
 	    	{% endfor %}
 	    </div>
 	    
-	   <div>
+<!-- 	   <div>
 	   	<label for="{{ form.miscFeedback.id_for_labe}}">Miscellaneous Feedback</label>
 	   	{{ form.miscFeedback }}
 	   </div>
 	    <input type="submit" value="Push">
+ -->
+		<div class="container ml-0 mt-3">	 
+	        <div class="form-row">
+	            <div class="form-group col-md-4">
+	              <label for="{{ form.miscFeedback.id_for_labe}}">Miscellaneous Feedback</label> {{ form.miscFeedback }}
+	            </div>
+	        </div>
+
+	        <div class="form-row">
+	            <div class="form-group col-md-4">
+	               <input class="btn btn-success w-25" type="submit" value="Push">
+	            </div>
+	        </div>
+	    </div>
 	</form>
 	{% endif %}
 {% endblock %}
