@@ -92,7 +92,6 @@ def takeAttendance(request):
 					dailyAtt = Attendance.objects.create(studentSRN=student.studentSRN, courseCode=course, attended=attended)
 					dailyAtt.save()
 				return redirect('/')
-
 		elif request.method == 'GET':
 			teacher = Teacher.objects.get(regNo=reqUser.username)
 			studentList = CourseEnrolled.objects.filter(courseCode=teacher.course).values_list('studentSRN', flat=True).order_by('studentSRN')
