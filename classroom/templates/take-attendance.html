@@ -1,34 +1,36 @@
 {% extends 'base.html' %}
 
 {% block content %}
-<div class="container text-center">
-    <h2>Take Attendance</h2>
-    <p>Put date ma, and take attendace ma/p>    
-</div>
+    {% if todaySubmit %}
+        <h2> Oops! Looks like you have already submitted attendance today.</h2>
+    {% else %}
+        <div class="container text-center">
+            <h2>Take Attendance</h2>
+            <p>Put date ma, and take attendace ma/p>    
+        </div>
 
-<div class="row justify-content-center">
-    <form action="{% url 'enter-attendance' %}" method="POST"> {% csrf_token %}
-    <table class="table table-striped w-auto">
-        <thead class="thead-dark">
-            <tr>
-                <th>Student SRN</th>
-                <th>Present</th>
-            </tr>
-        </thead>
-        <tbody>
-            {% for student in studentList %}
-            <tr class="table-secondary">
-                <td>{{ student }}</td>
-                <td><input type="checkbox" name="{{ student }}">
-            </tr>
-            {% endfor %}
-        </tbody>
-    </table>
-    <div class="container">
-        <input class="btn btn-success ml-5" type="submit" value="Submit"/>
-    </div>
-    </form>    
-</div>
-
-
+        <div class="row justify-content-center">
+            <form action="{% url 'enter-attendance' %}" method="POST"> {% csrf_token %}
+            <table class="table table-striped w-auto">
+                <thead class="thead-dark">
+                    <tr>
+                        <th>Student SRN</th>
+                        <th>Present</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for student in studentList %}
+                    <tr class="table-secondary">
+                        <td>{{ student }}</td>
+                        <td><input type="checkbox" name="{{ student }}">
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+            <div class="container">
+                <input class="btn btn-success ml-5" type="submit" value="Submit"/>
+            </div>
+            </form>    
+        </div>
+    {% endif %}
 {% endblock %}

@@ -2,7 +2,7 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.urls import reverse
 from django.utils import timezone
 from django.contrib.auth.decorators import login_required
-
+from datetime import date
 from .models import Student, Attendance, Teacher, Course, CourseEnrolled, Notification, Feedback
 from .forms import NotificationForm, FeedbackForm
 
@@ -75,21 +75,26 @@ def takeAttendance(request):
 		course = Teacher.objects.get(regNo=reqUser.username).course
 		print(course.code)
 		if request.method == 'POST':
-			studentsPresent = list(request.POST.dict().keys())
-			studentsPresent.remove('csrfmiddlewaretoken')
-			print(studentsPresent)
-			studentsEnrolled = CourseEnrolled.objects.filter(courseCode=course).select_related('studentSRN')
-			print(studentsEnrolled)
-			for student in studentsEnrolled:
-				attended = False
-				if student.studentSRN.srn in studentsPresent:
-					attended = True
-				dailyAtt = Attendance.objects.create(studentSRN=student.studentSRN, courseCode=course, attended=attended)
-				dailyAtt.save()
-			return redirect('/')
+			todaySubmit = Attendance.objects.filter(classDate=date.today())
+			print('Already Submitted, ', todaySubmit)
+			if todaySubmit.exists():
+				return render(request, 'take-attendance.html', context={'todaySubmit': True})
+			else:
+				studentsPresent = list(request.POST.dict().keys())
+				studentsPresent.remove('csrfmiddlewaretoken')
+				print(studentsPresent)
+				studentsEnrolled = CourseEnrolled.objects.filter(courseCode=course).select_related('studentSRN')
+				print(studentsEnrolled)
+				for student in studentsEnrolled:
+					attended = False
+					if student.studentSRN.srn in studentsPresent:
+						attended = True
+					dailyAtt = Attendance.objects.create(studentSRN=student.studentSRN, courseCode=course, attended=attended)
+					dailyAtt.save()
+				return redirect('/')
 
 		elif request.method == 'GET':
 			teacher = Teacher.objects.get(regNo=reqUser.username)
 			studentList = CourseEnrolled.objects.filter(courseCode=teacher.course).values_list('studentSRN', flat=True).order_by('studentSRN')
 			print(list(studentList))
-			return render(request, 'take-attendance.html', context={'studentList': studentList})
+			return render(request, 'take-attendance.html', context={'studentList': studentList, 'todaySubmit': False})
