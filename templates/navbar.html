@@ -3,8 +3,14 @@
 	<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
     <span class="navbar-toggler-icon"></span>
   </button>
+
   <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
   	<div class="navbar-nav">
+  		{% if request.user.isTeacher %}
+		<a class="nav-item nav-link" href="{% url 'enter-attendance' %}">Take Attendance</a>
+		{% else %}
+		<a class="nav-item nav-link" href="{% url 'view-attendance' %}">View Attendance</a>
+		{% endif %}
 		<a class="nav-item nav-link" href="{% url 'notifications' %}">Notifications</a>
 		{% if not request.user.isTeacher %}
 		<a class="nav-item nav-link" href="{% url 'student-feedback' %}">Feedback</a>
@@ -12,4 +18,5 @@
 		<a class="nav-item nav-link" href="{% url 'logout' %}">Logout</a>
 	</div>
    </div>
+
 </nav>

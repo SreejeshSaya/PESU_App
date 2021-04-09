@@ -1,0 +1,26 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h2>Take Attendance</h2>
+<p>Put date ma, and take attendace ma/p>
+
+<form action="{% url 'enter-attendance' %}" method="POST"> {% csrf_token %}
+<table>
+    <thead>
+        <tr>
+            <th>Student SRN</th>
+            <th>Present</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for student in studentList %}
+        <tr>
+            <td>{{ student }}</td>
+            <td><input type="checkbox" name="{{ student }}">
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+<input type="submit" value="Submit Attendance" />
+</form>
+{% endblock %}

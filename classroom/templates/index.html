@@ -12,15 +12,29 @@
 
         <div class="col-lg-3 col-md-6 mb-4 text-center">
           <div class="card">
-              <a href="http://www.google.com">
-                <img class="card-img-top" src="{% static 'info/images/attendance3.jpg' %}" alt="">
+              {% if not request.user.isTeacher %}
+              <a href="{% url 'view-attendance' %}">
+              <img class="card-img-top" src="{% static 'info/images/attendance3.jpg' %}" alt="">
               </a>
+              {% else %}
+              <a href="{% url 'enter-attendance' %}">
+              <img class="card-img-top" src="{% static 'info/images/attendance3.jpg' %}" alt="">
+              </a>
+              {% endif %}
               <div class="card-body">
               <h4 class="card-title">Attendance</h4>
+              {% if not request.user.isTeacher %}
               <p class="card-text">View your attendance!! </p>
+              {% else %}
+              <p class="card-text">Take attendance of your students!! </p>
+              {% endif %}
             </div>
             <div class="card-footer">
-                <a class="btn btn-primary" role="button" href="http://www.google.com">View Attendance</a>
+                {% if not request.user.isTeacher %}
+                <a class="btn btn-primary" role="button" href="{% url 'view-attendance' %}">View Attendance</a>
+                {% else %}
+                <a class="btn btn-primary" role="button" href="{% url 'enter-attendance' %}">Take Attendance</a>
+                {% endif %}
             </div>
           </div>
         </div>
@@ -33,13 +47,18 @@
             </a>
             <div class="card-body">
               <h4 class="card-title">Notification</h4>
+              {% if not request.user.isTeacher %}
               <p class="card-text">View notification by teacher</p>
+              {% else %}
+              <p class="card-text">Send notification to students</p>
+              {% endif %}
             </div>
             <div class="card-footer">
               <a href="{% url 'notifications' %}" class="btn btn-primary">View notification</a>
             </div>
           </div>
         </div>
+
         {% if not request.user.isTeacher %}
         <div class="col-lg-3 col-md-6 mb-4 text-center">
           <div class="card">

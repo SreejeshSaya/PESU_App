@@ -17,17 +17,11 @@ def indexView(request):
 		else:
 			user = Student.objects.get(srn=reqUser)
 		return render(request, 'index.html', context={'user': user})
-	# else:
-	# 	return render(request, 'info/homepage.html')
-	# return render(request, 'info/logout.html')
 
 @login_required
 def notificationsView(request):
 	print(f"notificationsView --- {request.user}")
 	notifs = Notification.objects.all()[:10]
-	# print(notifs[0].name)
-	# for notif in notifs:
-	# 	notif['teacher'] = Teacher.objects.get(regNo=tRegNo)
 	return render(request, 'notifications.html', context={'notifications': notifs})
 
 @login_required
@@ -55,8 +49,6 @@ def studentFeedback(request):
 			if feedback.exists():
 				return render(request, 'student-feedback.html', context={'feedbackSubmitted': True})
 			form = FeedbackForm(request.POST)
-			# print(request.POST['courseCode'])
-			# if form.is_valid():
 			print("FORM VALID")
 			feedback = form.save(commit=False)
 			feedback.studentSRN = Student.objects.get(srn=reqUser.username)
@@ -64,10 +56,40 @@ def studentFeedback(request):
 			print(feedback)
 			feedback.save()
 			return redirect('/')
-			# else:
-			# 	print("FORM INVALID")
-			# 	print("ERRORS:", form.errors)
 		else:
 			form = FeedbackForm(reqUser.username)
-			# course = CourseEnrolled.objects.filter(studentSRN=reqUser.username)
 			return render(request, 'student-feedback.html', context={'form': form, 'feedbackSubmitted': False})
+
+@login_required
+def viewAttendance(request):
+	reqUser = request.user
+	if not reqUser.isTeacher:
+		attendance = Attendance.objects.filter(studentSRN=reqUser.username)
+		return render(request, 'view-attendance.html', context={'attendance': attendance})
+
+@login_required
+def takeAttendance(request):
+	reqUser = request.user
+	print(reqUser.isTeacher)
+	if reqUser.isTeacher:
+		course = Teacher.objects.get(regNo=reqUser.username).course
+		print(course.code)
+		if request.method == 'POST':
+			studentsPresent = list(request.POST.dict().keys())
+			studentsPresent.remove('csrfmiddlewaretoken')
+			print(studentsPresent)
+			studentsEnrolled = CourseEnrolled.objects.filter(courseCode=course).select_related('studentSRN')
+			print(studentsEnrolled)
+			for student in studentsEnrolled:
+				attended = False
+				if student.studentSRN.srn in studentsPresent:
+					attended = True
+				dailyAtt = Attendance.objects.create(studentSRN=student.studentSRN, courseCode=course, attended=attended)
+				dailyAtt.save()
+			return redirect('/')
+
+		elif request.method == 'GET':
+			teacher = Teacher.objects.get(regNo=reqUser.username)
+			studentList = CourseEnrolled.objects.filter(courseCode=teacher.course).values_list('studentSRN', flat=True).order_by('studentSRN')
+			print(list(studentList))
+			return render(request, 'take-attendance.html', context={'studentList': studentList})
