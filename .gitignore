@@ -2,4 +2,3 @@ django/
 __pycache__/
 db.sqlite3
 Notes
-classroom/static
