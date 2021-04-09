@@ -3,28 +3,12 @@
 {% block content %}
 <form class="form-group" action="{% url 'create-notification' %}" method="POST"> {% csrf_token %}
     {{ form.non_field_errors }}
-<!--     <div>
-	    <label for="{{ form.title.id_for_label }}">Title</label>
-	    {{ form.title }}
-    </div>
-    <div>
-	    <label for="{{ form.description.id_for_label }}">Description</label>
-	    {{ form.description }}
-    </div>
-    <input class="btn btn-success" type="submit" value="Push"> -->
     <div class="container">
         <div class="form-row justify-content-center mt-3">
             <div class="form-group col-md-4">
               <div class="mb-1">Title</div>  
               <label for="{{ form.title.id_for_label }}"></label> {{ form.title }}
-              <!-- <input type="text" class="form-control" id="inputCity"> -->
             </div>
-
-            <!-- <input class="btn btn-success" type="submit" value="Push"> -->
-        <!--     <div class="form-group col-md-2">
-              <label for="inputZip">Zip</label>
-              <input type="text" class="form-control" id="inputZip">
-            </div> -->
         </div>
         <div class="form-row justify-content-center">
             <div class="form-group col-md-4">
