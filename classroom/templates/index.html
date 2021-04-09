@@ -1,5 +1,80 @@
 {% extends 'base.html' %}
-
 {% block content %}
-<h1>Welcome {{ user.name }} </h1>
-{% endblock %}
+<div class="container">
+		{% load static %}
+      <!-- Jumbotron Header -->
+      <header class="my-1 mb-5">
+        <h1 class="display-3 text-capitalize text-center">Welcome {{ user.name }}</h1>
+      </header>
+
+      <!-- Page Features -->
+      <div class="row d-flex justify-content-center">
+
+        <div class="col-lg-3 col-md-6 mb-4 text-center">
+          <div class="card">
+              {% if not request.user.isTeacher %}
+              <a href="{% url 'view-attendance' %}">
+              <img class="card-img-top" src="{% static 'info/images/attendance3.jpg' %}" alt="">
+              </a>
+              {% else %}
+              <a href="{% url 'enter-attendance' %}">
+              <img class="card-img-top" src="{% static 'info/images/attendance3.jpg' %}" alt="">
+              </a>
+              {% endif %}
+              <div class="card-body">
+              <h4 class="card-title">Attendance</h4>
+              {% if not request.user.isTeacher %}
+              <p class="card-text">View your attendance!! </p>
+              {% else %}
+              <p class="card-text">Take attendance of your students!! </p>
+              {% endif %}
+            </div>
+            <div class="card-footer">
+                {% if not request.user.isTeacher %}
+                <a class="btn btn-primary" role="button" href="{% url 'view-attendance' %}">View Attendance</a>
+                {% else %}
+                <a class="btn btn-primary" role="button" href="{% url 'enter-attendance' %}">Take Attendance</a>
+                {% endif %}
+            </div>
+          </div>
+        </div>
+
+
+        <div class="col-lg-3 col-md-6 mb-4 text-center">
+          <div class="card">
+            <a href="{% url 'notifications' %}">
+                <img class="card-img-top" src="{% static 'info/images/notification3.jpg' %}" alt="">
+            </a>
+            <div class="card-body">
+              <h4 class="card-title">Notification</h4>
+              {% if not request.user.isTeacher %}
+              <p class="card-text">View notification by teacher</p>
+              {% else %}
+              <p class="card-text">Send notification to students</p>
+              {% endif %}
+            </div>
+            <div class="card-footer">
+              <a href="{% url 'notifications' %}" class="btn btn-primary">View notification</a>
+            </div>
+          </div>
+        </div>
+
+        {% if not request.user.isTeacher %}
+        <div class="col-lg-3 col-md-6 mb-4 text-center">
+          <div class="card">
+            <a href="{% url 'student-feedback' %}">
+                <img class="card-img-top" src="{% static 'info/images/feedback3.jpeg' %}" alt="">
+            </a>
+            <div class="card-body">
+              <h4 class="card-title">Feedback</h4>
+              <p class="card-text">Give Feedback to teachers</p>
+            </div>
+            <div class="card-footer">
+              <a href="{% url 'student-feedback' %}" class="btn btn-primary">Give Feedback</a>
+            </div>
+          </div>
+        </div>
+        {%endif%}
+
+      </div>
+{% endblock %}    

@@ -1,8 +1,9 @@
 {% extends 'base.html' %}
 
 {% block content %}
-<table>
-	<thead>
+
+<table class="table table-striped w-auto mt-3 ml-4">
+	<thead class="thead-dark">
 		<tr>
 			<th>Course</th>
 			<th>Date</th>
@@ -11,7 +12,7 @@
 	</thead>
 	<tbody>
 		{% for day in attendance %}
-			<tr>
+			<tr class="table-secondary">
 				<td>{{ day.courseCode }}</td>
 				<td>{{ day.classDate }}</td>
 				{% if day.attended %}

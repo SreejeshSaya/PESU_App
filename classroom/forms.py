@@ -5,6 +5,10 @@ class NotificationForm(forms.ModelForm):
 	class Meta:
 		model = Notification
 		fields = ('title', 'description')
+		# Akhil, for the form input tags, check out this website to see how to 
+		# add classes and other attributes
+		# https://docs.djangoproject.com/en/3.1/topics/forms/modelforms/#overriding-the-default-fields
+		# https://stackoverflow.com/questions/5827590/css-styling-in-django-forms
 		widgets = {
 			'title': forms.TextInput(),
 			'description': forms.Textarea()

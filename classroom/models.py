@@ -79,6 +79,7 @@ class Attendance(models.Model):
 
 	class Meta:
 		verbose_name = "Student Attendance"
+		ordering = ('-classDate',)
 
 	def __str__(self):
 		return "%s - %s - %s " % (self.studentSRN, self.courseCode, self.classDate)
@@ -99,3 +100,6 @@ class Feedback(models.Model):
 	syllabus = models.SmallIntegerField(default=3, validators=[MinValueValidator(1), MaxValueValidator(5)])
 	doubtClar = models.SmallIntegerField(default=3, validators=[MinValueValidator(1), MaxValueValidator(5)])
 	miscFeedback = models.TextField(max_length=100, default = 'None')
+
+	def __str__(self):
+		return "%s : %s" % (self.studentSRN, self.courseCode)
