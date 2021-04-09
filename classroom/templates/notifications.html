@@ -5,7 +5,7 @@
 	<a href="{% url 'create-notification' %}"><button class="btn btn-primary mt-2 ml-2">Create Notifications</button></a>
 	{% endif %}
 	<ul>
-	<div class="card-deck">
+	<!--div class="card-deck"-->
 		{% for notif in notifications %}
 			<!--li>
 				<h4>{{ notif.title }}</h4>
@@ -20,6 +20,6 @@
 			  </div>
 			</div>
 		{% endfor %}
-	</div>
+	<!--/div-->
 	<ul>
 {% endblock %}
